@@ -1,5 +1,6 @@
 import time
 import database
+import datetime
 
 CATEGORIES = ["Food","Travel","Bills","Entertainment","Shopping","Miscellaneous"]
 
@@ -28,6 +29,23 @@ def checkCategory():
                 return category
         print("Please select a valid category")
 
+def checkExpenseDate():
+    while True:
+        answer = input("When was this expense? (DD/MM/YY or press ENTER for today)").strip()
+
+        if answer == "":
+            return datetime.date.today().isoformat()
+        try:
+            expense_date = datetime.datetime.strptime(answer, "%d/%m/%y").date()
+
+            if expense_date > datetime.date.today():
+                print("The expense date cannot be in the future.")
+                continue
+            return expense_date.isoformat()
+        except ValueError:
+            print("Please use the DD/MM/YY format")
+
+
 
 
 
@@ -36,8 +54,9 @@ def addExpense():
     category = checkCategory()
     amount = checkAmount()
     description = input("What is the expense description?: ")
+    expense_date = checkExpenseDate()
 
-    database.add_expense(category,amount,description)
+    database.add_expense(category,amount,description,expense_date)
     print("Added to the database.")
     
 def showExpenses():
@@ -91,7 +110,7 @@ def main():
             addExpense()
         elif answer ==3:
             deleteExpense()
-        time.sleep(3)
+        time.sleep(2)
 
 
 

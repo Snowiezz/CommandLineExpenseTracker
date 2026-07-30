@@ -10,20 +10,22 @@ def create_database():
                     id INTEGER PRIMARY KEY,
                     category TEXT NOT NULL,
                     amount_pence INTEGER NOT NULL,
-                    description TEXT
+                    description TEXT,
+                    expense_date TEXT NOT NULL,
+                    expense_time TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
                 )
             """)
     except sqlite3.Error as error:
         print("Error:",error)
 
-def add_expense(category, amount, description):
+def add_expense(category, amount, description,expense_date):
     with sqlite3.connect(DATABASE) as conn:
         conn.execute(
             """
-            INSERT INTO expenses (category, amount_pence, description)
-            VALUES (?,?,?)
+            INSERT INTO expenses (category, amount_pence, description,expense_date)
+            VALUES (?,?,?,?)
             """,
-            (category,amount,description)
+            (category,amount,description,expense_date)
             )
 def get_expenses():
     with sqlite3.connect(DATABASE) as conn:

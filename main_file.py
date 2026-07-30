@@ -1,5 +1,8 @@
 import time
 import database
+
+CATEGORIES = ["Food","Travel","Bills","Entertainment","Shopping","Miscellaneous"]
+
 def checkAmount():
     while True:
         try:
@@ -11,9 +14,26 @@ def checkAmount():
             return (amount*100)
         except ValueError:
             print("Please enter a valid amount")
+def checkCategory():
+    while True:
+        categoryanswer = input("What is the expense category? (press x for list of categories): ").strip()
+        if categoryanswer.lower() == "x":
+            print("List of categories:")
+            for category in CATEGORIES:
+                time.sleep(0.3)
+                print(category)
+            continue
+        for category in CATEGORIES:
+            if categoryanswer.lower() == category.lower():
+                return category
+        print("Please select a valid category")
+
+
+
+
 
 def addExpense():
-    category = input("What is the expense category?: ")
+    category = checkCategory()
     amount = checkAmount()
     description = input("What is the expense description?: ")
 

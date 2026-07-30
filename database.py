@@ -12,7 +12,7 @@ def create_database():
                     amount_pence INTEGER NOT NULL,
                     description TEXT,
                     expense_date TEXT NOT NULL,
-                    expense_time TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+                    time_created TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
                 )
             """)
     except sqlite3.Error as error:
@@ -31,10 +31,33 @@ def get_expenses():
     with sqlite3.connect(DATABASE) as conn:
         return conn.execute(
             """
-            SELECT * FROM expenses
+            SELECT id,category,amount_pence,description,expense_date FROM expenses
 
             """
         ).fetchall()
+
+def get_total(period):
+    queries = {
+        "week": """
+            SELECT COALESCE(SUM(amount_pence), 0)
+            FROM expenses
+            WHERE expense_date >= date('now', 'localtime', '-7 days')
+        """,
+        "month": """
+            SELECT COALESCE(SUM(amount_pence), 0)
+            FROM expenses
+            WHERE expense_date >= date('now', 'localtime', '-1 month')
+        """,
+        "all": """
+            SELECT COALESCE(SUM(amount_pence), 0)
+            FROM expenses
+        """
+    }
+
+
+    with sqlite3.connect(DATABASE) as connection:
+        result = connection.execute(queries[period]).fetchone()
+        return result[0]
 
 def delete_expense(expense_id):
     try:

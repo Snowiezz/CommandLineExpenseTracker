@@ -12,9 +12,10 @@ def checkAmount():
             if amount <= 0:
                 print("Amount must be greater than zero")
                 continue
-            return (amount*100)
+            return round(amount * 100)
         except ValueError:
             print("Please enter a valid amount")
+
 def checkCategory():
     while True:
         categoryanswer = input("What is the expense category? (press x for list of categories): ").strip()
@@ -45,6 +46,13 @@ def checkExpenseDate():
         except ValueError:
             print("Please use the DD/MM/YY format")
 
+def checkNumber(prompt):
+    while True:
+        try:
+            return int(input(prompt))
+        except ValueError:
+            print("Please enter a valid number")
+
 
 
 
@@ -65,16 +73,17 @@ def showExpenses():
     if not expenses:
         print("You have no expenses.")
         return 
-    for id, category, amount, description in expenses:
+    for id, category, amount, description,expense_date in expenses:
         print()
         print("ID:", id)
         print("Category:", category)
         print("Amount:", amount)
         print("Description:", description)
+        print("Date of expense: ",expense_date)
 
 def deleteExpense():
     while True:
-        expense_id = int(input("What is the ID for the expense? (press 0 to show current expenses): "))
+        expense_id = checkNumber("What is the ID for the expense? (press 0 to show current expenses): ")
         if expense_id == 0:
             showExpenses()
             continue
@@ -85,6 +94,33 @@ def deleteExpense():
             print("Expense deleted.")
             break
 
+def showTotal(period):
+    try:
+        total_pence = database.get_total(period)
+        print(f"Total for {period}: £{total_pence / 100:.2f}")
+    except ValueError as error:
+        print("Error: ", error)
+
+def expenseAnalytics():
+    while True:
+        print("Welcome to your expense analytics")
+        print("Select a mode:")
+        print("1. Week")
+        print("2. Month")
+        print("3. All time")
+        mode = checkNumber("")
+        if mode == 1:
+            print("This Week")
+            showTotal("week")
+        elif mode == 2:
+            print("Month")
+            showTotal("month")
+        elif mode == 3:
+            print("All time")
+            showTotal("all")
+        else:
+            print("Please choose one of the modes")
+        
 
 
 
@@ -102,7 +138,8 @@ def main():
         print("1. Show expenses")
         print("2. Add a new expense")
         print("3. Delete an expense")
-        answer = int(input("Answer: "))
+        print("4. Expenses analytics")
+        answer = checkNumber("Answer: ")
 
         if answer == 1:
             showExpenses()
@@ -110,6 +147,8 @@ def main():
             addExpense()
         elif answer ==3:
             deleteExpense()
+        elif answer == 4:
+            expenseAnalytics()
         time.sleep(2)
 
 

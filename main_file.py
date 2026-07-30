@@ -17,6 +17,7 @@ def checkAmount():
         except ValueError:
             print("Please enter a valid amount")
 
+
 def checkCategory():
     while True:
         categoryanswer = input("What is the expense category? (press x for list of categories): ").strip()
@@ -53,6 +54,16 @@ def checkNumber(prompt):
             return int(input(prompt))
         except ValueError:
             print("Please enter a valid number")
+
+def checkBool(prompt):
+    while True:
+        result = input(prompt).strip().lower()
+        if result == "y":
+            return True
+        elif result == "n":
+            return False
+        else:
+            print("Please select Y (yes) or N (no)")
 
 
 
@@ -139,7 +150,8 @@ def expenseAnalytics():
         mode = input().lower()
         if mode in ["week","month","all time"]:
             showTotal(mode)
-            showExpenseGraph(mode)
+            if checkBool("Would you like to see the expenses graph? (Y or N):"):
+                showExpenseGraph(mode)
             time.sleep(5)
         elif mode == "x":
             break

@@ -1,5 +1,4 @@
 import time
-import sqlite3
 import database
 def addExpense():
     category = input("What is the expense category?: ")
@@ -10,12 +9,35 @@ def addExpense():
     database.add_expense(category,cleaned_amount,description)
     print("Added to DB")
     
-def showExpenses(expenses):
-    for expense in expenses:
+def showExpenses():
+    expenses = database.get_expenses()
+
+    if not expenses:
+        print("You have no expenses.")
+        return 
+    for id, category, amount, description in expenses:
         print()
-        for key,value in expense.items():
-            print(key,":",value)
-        print()
+        print("ID:", id)
+        print("Category:", category)
+        print("Amount:", amount)
+        print("Description:", description)
+
+def deleteExpense():
+    while True:
+        expense_id = int(input("What is the ID for the expense? (press 0 to show current expenses): "))
+        if expense_id == 0:
+            showExpenses()
+            continue
+        result = database.delete_expense(expense_id)
+        if not result:
+            print("Expense not found, please check expense ID")
+        else:
+            print("Expense deleted.")
+            break
+
+
+
+
     
             
 
@@ -36,7 +58,9 @@ def main():
             showExpenses()
         elif answer == 2:
             addExpense()
-        time.sleep(1)
+        elif answer ==3:
+            deleteExpense()
+        time.sleep(3)
 
 
 

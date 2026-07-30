@@ -13,8 +13,8 @@ def create_database():
                     description TEXT
                 )
             """)
-    except sqlite3.error as error:
-        print(f"Error: {error}")
+    except sqlite3.Error as error:
+        print("Error:",error)
 
 def add_expense(category, amount, description):
     with sqlite3.connect(DATABASE) as conn:
@@ -25,3 +25,23 @@ def add_expense(category, amount, description):
             """,
             (category,amount,description)
             )
+def get_expenses():
+    with sqlite3.connect(DATABASE) as conn:
+        return conn.execute(
+            """
+            SELECT * FROM expenses
+
+            """
+        ).fetchall()
+
+def delete_expense(expense_id):
+    try:
+        with sqlite3.connect(DATABASE) as conn:
+            cursor = conn.execute(
+                "DELETE FROM expenses where id=?",
+                (expense_id,)
+            )
+            return cursor.rowcount > 0
+    except sqlite3.Error as error:
+        print("Error: ",error)
+        return False

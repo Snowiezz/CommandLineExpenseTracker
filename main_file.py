@@ -1,12 +1,13 @@
 import time
 import sqlite3
 import database
-def addExpense(expenses):
+def addExpense():
     category = input("What is the expense category?: ")
     amount = float(input("What is the expense amount?: £"))
     description = input("What is the expense description?: ")
 
-    database.add_expense(category,amount,description)
+    cleaned_amount = round(amount * 100) # turn to pence
+    database.add_expense(category,cleaned_amount,description)
     print("Added to DB")
     
 def showExpenses(expenses):
@@ -22,7 +23,7 @@ def showExpenses(expenses):
 
 
 def main():
-    create_database()
+    database.create_database()
     while True:
         print("Welcome to the expenses tracker!")
         print("Please choose an option (1,2,3)")
@@ -32,9 +33,9 @@ def main():
         answer = int(input("Answer: "))
 
         if answer == 1:
-            showExpenses(expenses)
+            showExpenses()
         elif answer == 2:
-            addExpense(expenses)
+            addExpense()
         time.sleep(1)
 
 

@@ -9,7 +9,8 @@ def create_database():
                 CREATE TABLE IF NOT EXISTS expenses (
                     id INTEGER PRIMARY KEY,
                     category TEXT NOT NULL,
-                    amount_pence INTEGER NOT NULL
+                    amount_pence INTEGER NOT NULL,
+                    description TEXT
                 )
             """)
     except sqlite3.error as error:
@@ -19,9 +20,8 @@ def add_expense(category, amount, description):
     with sqlite3.connect(DATABASE) as conn:
         conn.execute(
             """
-            INSERT INTO expenses (category, amount, description)
+            INSERT INTO expenses (category, amount_pence, description)
             VALUES (?,?,?)
             """,
             (category,amount,description)
             )
-        )

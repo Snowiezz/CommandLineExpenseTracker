@@ -1,7 +1,8 @@
 import time
 import database
 import datetime
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt #graph
+import matplotlib.dates as mdates # graph, converting x axis units
 
 CATEGORIES = ["Food","Travel","Bills","Entertainment","Shopping","Miscellaneous"]
 
@@ -130,15 +131,28 @@ def showExpenseGraph(period):
 
 
     plt.figure(figsize=(9, 5))
-    plt.plot(dates, amounts, marker="o")
-
+    plt.bar(dates, amounts)
+    today = datetime.date.today()
+    if period == "week":
+        plt.xlim(today - datetime.timedelta(days=6),today)
+    elif period == "month":
+        plt.xlim(today - datetime.timedelta(days=30),today)
+    elif period == "all time" and len(dates) == 1:
+        plt.xlim(
+            dates[0] - datetime.timedelta(days=3),
+            dates[0] + datetime.timedelta(days=3)
+        )
     plt.title(f"Expenses over time — {period}")
     plt.xlabel("Date")
     plt.ylabel("Amount spent (£)")
-    plt.grid(True)
+    # change units to dd/mm
+    axis = plt.gca()
+    axis.xaxis.set_major_formatter(mdates.DateFormatter("%d/%m"))
+    axis.xaxis.set_major_locator(mdates.DayLocator(interval=1)) # daily
     plt.xticks(rotation=45)
     plt.tight_layout()
     plt.show()
+    return
 def expenseAnalytics():
     while True:
         print("Welcome to your expense analytics")
@@ -152,7 +166,7 @@ def expenseAnalytics():
             showTotal(mode)
             if checkBool("Would you like to see the expenses graph? (Y or N):"):
                 showExpenseGraph(mode)
-            time.sleep(5)
+            time.sleep(2)
         elif mode == "x":
             break
         else:

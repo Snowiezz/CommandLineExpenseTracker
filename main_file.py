@@ -1,13 +1,24 @@
 import time
 import database
+def checkAmount():
+    while True:
+        try:
+            amount = float(input("What is the expense amount?: £"))
+
+            if amount <= 0:
+                print("Amount must be greater than zero")
+                continue
+            return (amount*100)
+        except ValueError:
+            print("Please enter a valid amount")
+
 def addExpense():
     category = input("What is the expense category?: ")
-    amount = float(input("What is the expense amount?: £"))
+    amount = checkAmount()
     description = input("What is the expense description?: ")
 
-    cleaned_amount = round(amount * 100) # turn to pence
-    database.add_expense(category,cleaned_amount,description)
-    print("Added to DB")
+    database.add_expense(category,amount,description)
+    print("Added to the database.")
     
 def showExpenses():
     expenses = database.get_expenses()

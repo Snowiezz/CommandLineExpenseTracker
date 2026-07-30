@@ -5,7 +5,7 @@ DATABASE = "expenses.db"
 def create_database():
     try:
         with sqlite3.connect(DATABASE) as conn:
-            conn.execute("""
+            query = """
                 CREATE TABLE IF NOT EXISTS expenses (
                     id INTEGER PRIMARY KEY,
                     category TEXT NOT NULL,
@@ -14,7 +14,8 @@ def create_database():
                     expense_date TEXT NOT NULL,
                     time_created TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
                 )
-            """)
+                """
+            conn.execute(query)
     except sqlite3.Error as error:
         print("Error:",error)
 
@@ -70,3 +71,18 @@ def delete_expense(expense_id):
     except sqlite3.Error as error:
         print("Error: ",error)
         return False
+def get_expenses_over_time(period):
+    filters = {
+        "week": "WHERE expense_date >= date('now', 'localtime', '-6 days')",
+        "month": "WHERE expense_date >= date('now', 'localtime', '-1 month')",
+        "all time": ""
+    }
+    query = f"""
+        SELECT expense_date, SUM(amount_pence)
+        FROM expenses
+        {filters[period]}
+        GROUP BY expense_date
+        ORDER BY expense_date
+    """
+    with sqlite3.connect(DATABASE) as conn:
+        return conn.execute(query).fetchall()

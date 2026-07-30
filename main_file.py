@@ -1,6 +1,7 @@
 import time
 import database
 import datetime
+import matplotlib.pyplot as plt
 
 CATEGORIES = ["Food","Travel","Bills","Entertainment","Shopping","Miscellaneous"]
 
@@ -100,7 +101,33 @@ def showTotal(period):
         print(f"Total for {period}: £{total_pence / 100:.2f}")
     except ValueError as error:
         print("Error: ", error)
+def showExpenseGraph(period):
+    try:
+        results = database.get_expenses_over_time(period)
+    except ValueError as error:
+        print("Error: ", error)
+        return
+    if not results:
+        print("There are no expenses")
+        return
+    dates = []
+    amounts = []
 
+    for expense_date, amount_pence in results:
+        dates.append(datetime.date.fromisoformat(expense_date))
+        amounts.append(amount_pence / 100)
+
+
+    plt.figure(figsize=(9, 5))
+    plt.plot(dates, amounts, marker="o")
+
+    plt.title(f"Expenses over time — {period}")
+    plt.xlabel("Date")
+    plt.ylabel("Amount spent (£)")
+    plt.grid(True)
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    plt.show()
 def expenseAnalytics():
     while True:
         print("Welcome to your expense analytics")
@@ -112,7 +139,8 @@ def expenseAnalytics():
         mode = input().lower()
         if mode in ["week","month","all time"]:
             showTotal(mode)
-            time.sleep(1)
+            showExpenseGraph(mode)
+            time.sleep(5)
         elif mode == "x":
             break
         else:

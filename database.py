@@ -48,7 +48,7 @@ def get_total(period):
             FROM expenses
             WHERE expense_date >= date('now', 'localtime', '-1 month')
         """,
-        "all": """
+        "all time": """
             SELECT COALESCE(SUM(amount_pence), 0)
             FROM expenses
         """

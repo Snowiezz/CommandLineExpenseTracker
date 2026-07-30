@@ -104,20 +104,17 @@ def showTotal(period):
 def expenseAnalytics():
     while True:
         print("Welcome to your expense analytics")
-        print("Select a mode:")
-        print("1. Week")
-        print("2. Month")
-        print("3. All time")
-        mode = checkNumber("")
-        if mode == 1:
-            print("This Week")
-            showTotal("week")
-        elif mode == 2:
-            print("Month")
-            showTotal("month")
-        elif mode == 3:
-            print("All time")
-            showTotal("all")
+        print("Select a time period:")
+        print("-Week")
+        print("-Month")
+        print("-All time")
+        print("press x to go back to the start")
+        mode = input().lower()
+        if mode in ["week","month","all time"]:
+            showTotal(mode)
+            time.sleep(1)
+        elif mode == "x":
+            break
         else:
             print("Please choose one of the modes")
         
@@ -138,7 +135,7 @@ def main():
         print("1. Show expenses")
         print("2. Add a new expense")
         print("3. Delete an expense")
-        print("4. Expenses analytics")
+        print("4. Analytics")
         answer = checkNumber("Answer: ")
 
         if answer == 1:

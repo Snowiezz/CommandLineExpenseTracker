@@ -90,7 +90,7 @@ def showExpenses():
         print()
         print("ID:", id)
         print("Category:", category)
-        print("Amount:", amount)
+        print("Amount: £", amount/100)
         print("Description:", description)
         print("Date of expense: ",expense_date)
 
@@ -100,12 +100,16 @@ def deleteExpense():
         if expense_id == 0:
             showExpenses()
             continue
-        result = database.delete_expense(expense_id)
         if not result:
             print("Expense not found, please check expense ID")
         else:
-            print("Expense deleted.")
-            break
+            confirmation = input("Are you sure? Y/N: ")
+            if confirmation.lower() == "y":
+                result = database.delete_expense(expense_id)
+                print("Expense deleted.")
+                break
+            else:
+                return
 
 def showTotal(period):
     try:
@@ -185,7 +189,7 @@ def main():
     database.create_database()
     while True:
         print("Welcome to the expenses tracker!")
-        print("Please choose an option (1,2,3)")
+        print("Please choose an option")
         print("1. Show expenses")
         print("2. Add a new expense")
         print("3. Delete an expense")

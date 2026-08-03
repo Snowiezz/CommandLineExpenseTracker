@@ -28,12 +28,12 @@ def add_expense(category, amount, description,expense_date):
             """,
             (category,amount,description,expense_date)
             )
-def get_expenses(type,order):
+def get_expenses(column,order):
     with sqlite3.connect(DATABASE) as conn:
         return conn.execute(
             f"""
             SELECT id,category,amount_pence,description,expense_date FROM expenses
-            ORDER BY {type} {order}
+            ORDER BY {column} {order}
             """
         ).fetchall()
 

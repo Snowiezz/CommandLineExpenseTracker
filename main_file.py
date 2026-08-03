@@ -91,19 +91,19 @@ def showExpenses():
         print("Press -1 to return")
         answer = checkNumber("Answer:")
         if answer == 1:
-            type = 'category'
+            column = 'category'
             order = 'ASC'
         elif answer == 2:
-            type = 'expense_date'
+            column = 'expense_date'
             order = 'DESC'
         elif answer == 3:
-            type = 'expense_date'
+            column = 'expense_date'
             order = 'ASC'
         elif answer == 4:
-            type = 'amount_pence'
+            column = 'amount_pence'
             order = 'ASC'
         elif answer == 5:
-            type = 'amount_pence'
+            column = 'amount_pence'
             order = 'DESC'
         elif answer == -1:
             break
@@ -111,7 +111,7 @@ def showExpenses():
             print("Please select a valid number")
             continue
 
-        expenses = database.get_expenses(type,order)
+        expenses = database.get_expenses(column,order)
 
         if not expenses:
             print("You have no expenses.")
@@ -175,7 +175,7 @@ def updateExpense():
             if not answer:
                 print("Invalid expense ID. ")
                 continue
-            print("Category has been changed.")
+            print("Expense updated.")
             break
 
 

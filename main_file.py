@@ -113,10 +113,23 @@ def deleteExpense():
 
 def showTotal(period):
     try:
-        total_pence = database.get_total(period)
-        print(f"Total for {period}: £{total_pence / 100:.2f}")
+        expensedict = {}
+        expenses = database.get_total(period)
+        for elem in expenses:
+            if elem[1] not in expensedict:
+                expensedict[elem[1]] = elem[0]
+            else:
+                expensedict[elem[1]] += elem[0]
+        for key,value in expensedict.items():
+            print(key,": £",value/100)
+                
+
+        print(f"Total for {period}: £{sum(expensedict.values()) / 100:.2f}")
     except ValueError as error:
         print("Error: ", error)
+
+
+
 def showExpenseGraph(period):
     try:
         results = database.get_expenses_over_time(period)
@@ -170,7 +183,7 @@ def expenseAnalytics():
             showTotal(mode)
             if checkBool("Would you like to see the expenses graph? (Y or N):"):
                 showExpenseGraph(mode)
-            time.sleep(2)
+            time.sleep(1)
         elif mode == "x":
             break
         else:

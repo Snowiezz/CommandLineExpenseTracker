@@ -40,25 +40,25 @@ def get_expenses():
 def get_total(period):
     queries = {
         "week": """
-            SELECT COALESCE(SUM(amount_pence), 0)
+            SELECT amount_pence,category
             FROM expenses
             WHERE expense_date >= date('now', 'localtime', '-7 days')
         """,
         "month": """
-            SELECT COALESCE(SUM(amount_pence), 0)
+            SELECT amount_pence,category
             FROM expenses
             WHERE expense_date >= date('now', 'localtime', '-1 month')
         """,
         "all time": """
-            SELECT COALESCE(SUM(amount_pence), 0)
+            SELECT amount_pence,category
             FROM expenses
         """
     }
 
 
     with sqlite3.connect(DATABASE) as connection:
-        result = connection.execute(queries[period]).fetchone()
-        return result[0]
+        result = connection.execute(queries[period]).fetchall()
+        return result
 
 def delete_expense(expense_id):
     try:

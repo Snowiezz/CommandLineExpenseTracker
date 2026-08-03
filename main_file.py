@@ -134,6 +134,9 @@ def updateExpense():
             elif choice1 == 3:
                 column = "expense_date"
                 change = checkExpenseDate()
+            elif choice1 == 4:
+                column = "description"
+                change = input("What is the expense description?: ")
             else:
                 print("Select one of the numbers.")
                 continue

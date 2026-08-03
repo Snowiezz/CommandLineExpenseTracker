@@ -127,7 +127,9 @@ def updateExpense():
             choice1 = int(input())
             if choice1 == 1:
                 answer = database.update_expense("category",checkCategory(),expense_id)
-                print(answer)
+                if answer == False:
+                    print("Invalid expense ID. ")
+                    continue
 
 
 def showTotal(period):

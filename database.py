@@ -40,21 +40,21 @@ def get_expenses():
 def get_total(period):
     queries = {
         "week": """
-            SELECT (amount_pence),category
+            SELECT category, SUM(amount_pence)
             FROM expenses
-            WHERE expense_date >= date('now', 'localtime', '-7 days')
+            WHERE expense_date >= date('now', 'localtime', '-6 days')
             GROUP BY category
             ORDER BY SUM(amount_pence) DESC
         """,
         "month": """
-            SELECT (amount_pence),category
+            SELECT category, SUM(amount_pence)
             FROM expenses
             WHERE expense_date >= date('now', 'localtime', '-1 month')
             GROUP BY category
             ORDER BY SUM(amount_pence) DESC   
         """,
         "all time": """
-            SELECT sum(amount_pence),category
+            SELECT category, SUM(amount_pence)
             FROM expenses
             GROUP BY category
             ORDER BY SUM(amount_pence) DESC
@@ -92,3 +92,19 @@ def get_expenses_over_time(period):
     """
     with sqlite3.connect(DATABASE) as conn:
         return conn.execute(query).fetchall()
+
+
+def update_expense(column, change,expense_id):
+    try:
+        with sqlite3.connect(DATABASE) as conn:
+            cursor = conn.execute(
+            f"""
+            UPDATE expenses
+            SET {column} = ?
+            WHERE id=?
+            """,
+            (change,expense_id,))
+            return cursor.rowcount > 0
+    except sqlite3.Error as error:
+        print("Error: ",error)
+        return False

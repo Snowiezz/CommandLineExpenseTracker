@@ -113,6 +113,23 @@ def deleteExpense():
             else:
                 return
 
+def updateExpense():
+    while True:
+        expense_id = checkNumber("What is the ID for the expense? (press 0 to show current expenses)")
+        if expense_id == 0:
+            showExpenses()
+            continue
+        else:
+            print("What would you like to change?")
+            print("1. Category")
+            print("2. Amount")
+            print("3. Expense Date")
+            choice1 = int(input())
+            if choice1 == 1:
+                answer = database.update_expense("category",checkCategory(),expense_id)
+                print(answer)
+
+
 def showTotal(period):
     try:
         print("Spending by category: ")
@@ -204,7 +221,8 @@ def main():
         print("1. Show expenses")
         print("2. Add a new expense")
         print("3. Delete an expense")
-        print("4. Analytics")
+        print("4. Update an expense")
+        print("5. Analytics")
         answer = checkNumber("Answer: ")
 
         if answer == 1:
@@ -214,6 +232,8 @@ def main():
         elif answer ==3:
             deleteExpense()
         elif answer == 4:
+            updateExpense()
+        elif answer == 5:
             expenseAnalytics()
         time.sleep(2)
 

@@ -16,6 +16,13 @@ def create_database():
                 )
                 """
             conn.execute(query)
+            conn.execute("""
+            CREATE TABLE IF NOT EXISTS budgets (
+                id INTEGER PRIMARY KEY,
+                month TEXT NOT NULL UNIQUE,
+                amount_pence INTEGER NOT NULL
+            )
+            """)
     except sqlite3.Error as error:
         print("Error:",error)
 
@@ -36,6 +43,15 @@ def get_expenses(column,order):
             ORDER BY {column} {order}
             """
         ).fetchall()
+
+def get_budget(month):
+    with sqlite3.connect(DATABASE) as conn:
+        return conn.execute(
+            f"""
+            SELECT amount_pence FROM budgets
+            WHERE month = ?
+            """,(month,)
+        ).fetchone()
 
 def get_total(period):
     queries = {
@@ -108,3 +124,12 @@ def update_expense(column, change,expense_id):
     except sqlite3.Error as error:
         print("Error: ",error)
         return False
+def set_budget(month,amount_pence):
+    with sqlite3.connect(DATABASE) as conn:
+        cursor = conn.execute(
+            f"""
+            INSERT INTO budgets (month,amount_pence)
+            VALUES (?,?)
+            """,(month,amount_pence)
+        )
+    return True

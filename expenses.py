@@ -263,7 +263,7 @@ def expenseAnalytics():
 
 
 
-def main():
+def expensesmain():
     database.create_database()
     while True:
         print("Welcome to the expenses tracker!")
@@ -273,6 +273,7 @@ def main():
         print("3. Delete an expense")
         print("4. Update an expense")
         print("5. Analytics")
+        print("6. Exit")
         answer = checkNumber("Answer: ")
 
         if answer == 1:
@@ -285,10 +286,11 @@ def main():
             updateExpense()
         elif answer == 5:
             expenseAnalytics()
+        elif answer == 6:
+            return
         time.sleep(2)
 
 
 
-if __name__ == "__main__":
-    main()
+
 

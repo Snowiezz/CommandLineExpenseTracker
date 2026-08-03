@@ -100,31 +100,29 @@ def deleteExpense():
         if expense_id == 0:
             showExpenses()
             continue
-        if not result:
-            print("Expense not found, please check expense ID")
         else:
             confirmation = input("Are you sure? Y/N: ")
             if confirmation.lower() == "y":
                 result = database.delete_expense(expense_id)
+                if not result:
+                    print("Expense not found, please check expense ID")
+                    break
                 print("Expense deleted.")
+
                 break
             else:
                 return
 
 def showTotal(period):
     try:
-        expensedict = {}
+        print("Spending by category: ")
         expenses = database.get_total(period)
-        for elem in expenses:
-            if elem[1] not in expensedict:
-                expensedict[elem[1]] = elem[0]
-            else:
-                expensedict[elem[1]] += elem[0]
-        for key,value in expensedict.items():
-            print(key,": £",value/100)
-                
 
-        print(f"Total for {period}: £{sum(expensedict.values()) / 100:.2f}")
+        for category, amount in expenses:
+            print(f"{category}: £{amount / 100:.2f}")
+
+        total = sum(amount for _, amount in expenses)
+        print(f"Total for {period}: £{total / 100:.2f}")
     except ValueError as error:
         print("Error: ", error)
 

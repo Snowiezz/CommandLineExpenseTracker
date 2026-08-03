@@ -40,18 +40,24 @@ def get_expenses():
 def get_total(period):
     queries = {
         "week": """
-            SELECT amount_pence,category
+            SELECT (amount_pence),category
             FROM expenses
             WHERE expense_date >= date('now', 'localtime', '-7 days')
+            GROUP BY category
+            ORDER BY SUM(amount_pence) DESC
         """,
         "month": """
-            SELECT amount_pence,category
+            SELECT (amount_pence),category
             FROM expenses
             WHERE expense_date >= date('now', 'localtime', '-1 month')
+            GROUP BY category
+            ORDER BY SUM(amount_pence) DESC   
         """,
         "all time": """
-            SELECT amount_pence,category
+            SELECT sum(amount_pence),category
             FROM expenses
+            GROUP BY category
+            ORDER BY SUM(amount_pence) DESC
         """
     }
 

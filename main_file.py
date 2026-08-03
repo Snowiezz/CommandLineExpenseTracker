@@ -81,18 +81,40 @@ def addExpense():
     print("Added to the database.")
     
 def showExpenses():
-    expenses = database.get_expenses()
-
-    if not expenses:
-        print("You have no expenses.")
-        return 
-    for id, category, amount, description,expense_date in expenses:
+    while True:
         print()
-        print("ID:", id)
-        print("Category:", category)
-        print("Amount: £", amount/100)
-        print("Description:", description)
-        print("Date of expense: ",expense_date)
+        print('1. Sort by Category')
+        print("2. Sort by expense date (newest)")
+        print("3. Sort by expense date (oldest)")
+        print("Press -1 to return")
+        answer = checkNumber("Answer:")
+        if answer == 1:
+            type = 'category'
+            order = 'ASC'
+        elif answer == 2:
+            type = 'expense_date'
+            order = 'DESC'
+        elif answer == 3:
+            type = 'expense_date'
+            order = 'ASC'
+        elif answer == -1:
+            break
+        else:
+            print("Please select a valid number")
+            continue
+
+        expenses = database.get_expenses(type,order)
+
+        if not expenses:
+            print("You have no expenses.")
+            return 
+        for id, category, amount, description,expense_date in expenses:
+            print()
+            print("ID:", id)
+            print("Category:", category)
+            print("Amount: £", amount/100)
+            print("Description:", description)
+            print("Date of expense: ",expense_date)
 
 def deleteExpense():
     while True:
@@ -124,7 +146,8 @@ def updateExpense():
             print("1. Category")
             print("2. Amount")
             print("3. Expense Date")
-            choice1 = int(input())
+            print("4. Description")
+            choice1 = checkNumber("Answer:")
             if choice1 == 1:
                 column = "category"
                 change = checkCategory()

@@ -126,10 +126,24 @@ def updateExpense():
             print("3. Expense Date")
             choice1 = int(input())
             if choice1 == 1:
-                answer = database.update_expense("category",checkCategory(),expense_id)
-                if answer == False:
-                    print("Invalid expense ID. ")
-                    continue
+                column = "category"
+                change = checkCategory()
+            elif choice1 == 2:
+                column = "amount_pence"
+                change = checkAmount()
+            elif choice1 == 3:
+                column = "expense_date"
+                change = checkExpenseDate()
+            else:
+                print("Select one of the numbers.")
+                continue
+            answer = database.update_expense(column,change,expense_id)
+            if not answer:
+                print("Invalid expense ID. ")
+                continue
+            print("Category has been changed.")
+            break
+
 
 
 def showTotal(period):

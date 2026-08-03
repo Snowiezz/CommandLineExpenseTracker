@@ -86,6 +86,8 @@ def showExpenses():
         print('1. Sort by Category')
         print("2. Sort by expense date (newest)")
         print("3. Sort by expense date (oldest)")
+        print("4. Sort by price (lowest)")
+        print("5. Sort by price (Highest)")
         print("Press -1 to return")
         answer = checkNumber("Answer:")
         if answer == 1:
@@ -97,6 +99,12 @@ def showExpenses():
         elif answer == 3:
             type = 'expense_date'
             order = 'ASC'
+        elif answer == 4:
+            type = 'amount_pence'
+            order = 'ASC'
+        elif answer == 5:
+            type = 'amount_pence'
+            order = 'DESC'
         elif answer == -1:
             break
         else:
